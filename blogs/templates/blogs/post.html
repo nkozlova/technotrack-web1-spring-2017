@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a><br/>
+    <b>Пост: {{ object.title }}</b><br/>
+    <b>Автор: {{ object.author }}</b>
+    <p>{{ object.text }}</p>
+
+    {% if object.comment_set.all %}
+        <div>
+        <h2 style="color: green">Комментарии данного поста:</h2>
+       {% for comment in object.comment_set.all %}
+            <b>Комментарий номер {{ comment.id }}:</b><br/>
+            <p>Автор: {{ comment.author }}</p>
+            <p>{{ comment.text }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

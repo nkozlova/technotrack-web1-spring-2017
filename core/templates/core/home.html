@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h2 style="color: green">Количество блогов:</h2>
+    <b>{{ blogs_count }}</b><br/>
+    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+
+    <h2 style="color: green">Количество постов:</h2>
+    <b>{{ posts_count }}</b><br/>
+
+    <h2 style="color: green">Количество комментариев:</h2>
+    <b>{{ comments_count }}</b><br/>
+
+{% endblock %}

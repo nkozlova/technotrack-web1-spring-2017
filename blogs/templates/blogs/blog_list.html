@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h3><a href="{% url "home" %}">На домашнюю страницу</a></h3>
+
+    <h1 style="color: green">Список блогов:</h1>
+    {% for blog in object_list %}
+        <div>
+            <b>Блог номер {{ blog.id }} <b/><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a><br/>
+            <div>Автор: {{ blog.author }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}

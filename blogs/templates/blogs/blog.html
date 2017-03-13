@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h2><a href="{% url "blogs:blog_list" %}">Все блоги</a></h2>
+    <h2 style="color: green">Блог номер {{ object.id }}:</h2>
+    <b>Название: </b><h2><p>{{ object.title }}</p></h2><br/>
+    <b>Автор: </b><p>{{ object.author }}</p><br/>
+    <b>Описание: </b><p>{{ object.description }}</p><br/>
+
+
+    {% if object.post_set.all %}
+        <div>
+        <h2 style="color: green">Посты данного блога:</h2>
+       {% for post in object.post_set.all %}
+            <b>Автор: {{ post.author }}</b><br/>
+            <a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a><br/>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}
