@@ -1,19 +1,32 @@
 {% extends "core/base.html" %}
 
 {% block content %}
+    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
     <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a><br/>
+    <br>
     <b>Пост: {{ object.title }}</b><br/>
     <b>Автор: {{ object.author }}</b>
     <p>{{ object.text }}</p>
+
+    {% if object.author == user %}
+        <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
+        <br>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <br><a href="{% url "comments:create_comment" pk=object.id %}">Создать новый комментарий</a></br>
+    {% endif %}
 
     {% if object.comment_set.all %}
         <div>
         <h2 style="color: green">Комментарии данного поста:</h2>
        {% for comment in object.comment_set.all %}
-            <b>Комментарий номер {{ comment.id }}:</b><br/>
-            <p>Автор: {{ comment.author }}</p>
-            <p>{{ comment.text }}</p>
-        {% endfor %}
+           <p>Автор: {{ comment.author }}</p>
+           <p>{{ comment.text }}</p>
+           <br>
+       {% endfor %}
         </div>
+    {% else %}
+        <br>Комментариев пока нет</br>
     {% endif %}
 {% endblock %}

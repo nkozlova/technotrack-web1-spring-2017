@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    {% if user.is_anonymous %}
+        <head>Регистрация</head>
+        <a href="{% url "login" %}">Уже есть аккаунт</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_anonymous %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Зарегестрироваться</button>
+        </form>
+    {% else %}
+        {{ user.username }}
+        <a href="{% url "logout" %}">Выход</a>
+    {% endif %}
+{% endblock %}

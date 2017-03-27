@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <b>Создание новой категории</b>
+    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+
+    <form action="{% url "blogs:create_category" %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Создать">
+    </form>
+{% endblock %}

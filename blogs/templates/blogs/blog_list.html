@@ -1,13 +1,32 @@
 {% extends "core/base.html" %}
+{% load widget_tweaks %}
 
 {% block content %}
     <h3><a href="{% url "home" %}">На домашнюю страницу</a></h3>
 
+    <div>
+        <form method="get" action="{% url "blogs:blog_list" %}">
+            {{ sortform.sort.label_tag }}{{ sortform.sort }}
+            {{ sortform.search.label_tag }}<br>{{ sortform.search }}
+            <input type="submit">
+        </form>
+    </div>
+
+    {% if user.is_authenticated %}
+        <h3><a href="{% url "blogs:create_blog" %}">Создать новый блог</a></h3>
+        <a href="{% url "blogs:create_category" %}">Создать новую категорию</a>
+        <a href="{% url "blogs:create_post" %}">Создать новый пост</a>
+    {% endif %}
+
     <h1 style="color: green">Список блогов:</h1>
     {% for blog in object_list %}
         <div>
-            <b>Блог номер {{ blog.id }} <b/><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a><br/>
-            <div>Автор: {{ blog.author }}</div>
+            <br><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a></br>
+            Автор: {{ blog.author }}
+            {% if blog.author == user %}
+                <a href="{% url "blogs:edit_blog" pk=blog.id %}">Редактировать блог</a>
+            {% endif %}
+            </b>
         </div>
     {% endfor %}
 {% endblock %}

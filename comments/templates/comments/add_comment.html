@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <b>Создание нового комментария</b>
+    <br>
+    <a href="{% url "blogs:blog_list" %}">Вернуться к списку блогов</a><br/>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Создать">
+    </form>
+{% endblock %}

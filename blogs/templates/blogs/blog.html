@@ -2,18 +2,33 @@
 
 {% block content %}
     <h2><a href="{% url "blogs:blog_list" %}">Все блоги</a></h2>
-    <h2 style="color: green">Блог номер {{ object.id }}:</h2>
-    <b>Название: </b><h2><p>{{ object.title }}</p></h2><br/>
+    <h2><p>{{ object.title }}</p></h2><br/>
     <b>Автор: </b><p>{{ object.author }}</p><br/>
     <b>Описание: </b><p>{{ object.description }}</p><br/>
+    <div class="category">Категории:
+        {% for category in blog.category.all %}
+            <a href="{% url "blogs:category" pk=category.id %}">{{ category }}</a>
+            {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+	</div>
 
+    {% if blog.author == user %}
+        <br>
+        <a href="{% url "blogs:edit_blog" pk=blog.id %}">Редактировать блог</a>
+        <a href="{% url "blogs:create_post_in_blog" pk=blog.id %}">Создать новый пост</a>
+        <br>
+    {% endif %}
 
     {% if object.post_set.all %}
         <div>
         <h2 style="color: green">Посты данного блога:</h2>
-       {% for post in object.post_set.all %}
+        {% for post in object.post_set.all %}
             <b>Автор: {{ post.author }}</b><br/>
             <a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a><br/>
+            {% if post.author == user %}
+                <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
+            {% endif %}
+            <br><br>
         {% endfor %}
         </div>
     {% endif %}

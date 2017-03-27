@@ -3,7 +3,19 @@
         <title>My title</title>
     </head>
     <body>
-    <h2>{% block title %}{% endblock %}</h2>
+
+        <h1>{% block title %}
+
+            {% if user.is_anonymous %}
+                <a href="{% url "login" %}">Вход</a>
+            {% else %}
+                {{ user.username }}
+                <a href="{% url "logout" %}">Выход</a>
+            {% endif %}
+
+        {% endblock %}</h1>
         {% block content %}{% endblock %}
+
+        <p>{% block footer %}Самый лучший в мире сайт 0_0{% endblock %}</p>
     </body>
 </html>

@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+    <h2><a href="{% url "blogs:blog" pk=object.blog.id %}">К блогу</a></h2>
+    <h2><a href="{% url "blogs:post" pk=object.id %}">К посту</a></h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+    </form>
+
+{% endblock %}
