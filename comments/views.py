@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.generic import CreateView
 from .models import Comment
 from blogs.models import Post
@@ -9,12 +10,14 @@ class CreateComment(CreateView):
     template_name = 'comments/add_comment.html'
     model = Comment
     fields = ('text',)
-    success_url = '/blogs/post/'
     postid = None
+
+    def get_success_url(self):
+        return reverse("blogs:post", args=(self.object.pk, ))
+
 
     def dispatch(self, request, *args, **kwargs):
         self.postid = get_object_or_404(Post, id=kwargs['pk'])
-        self.success_url += kwargs['pk']
         return super(CreateComment, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

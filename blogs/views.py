@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Blog, Post, Category
 from django import forms
@@ -7,11 +8,11 @@ from django import forms
 
 class SortForm(forms.Form):
 
-    sort = forms.ChoiceField(choices={
+    sort = forms.ChoiceField(choices=(
         ('title', u'Заголовок'),
         ('description', u'Описание'),
-    },
-        widget=forms.RadioSelect
+    ),
+        required=False, widget=forms.RadioSelect,
     )
     search = forms.CharField(required=False, widget=forms.TextInput)
 
@@ -21,11 +22,12 @@ class UpdateBlog(UpdateView):
     template_name = 'blogs/edit_blog.html'
     model = Blog
     fields = ('title', 'description', 'category')
-    success_url = '/blogs/'
 
     def dispatch(self, request, *args, **kwargs):
-        self.success_url += kwargs['pk']
         return super(UpdateBlog, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse("blogs:blog", args=(self.object.pk, ))
 
     def get_queryset(self):
         return super(UpdateBlog, self).get_queryset().filter(author=self.request.user)
@@ -36,7 +38,9 @@ class CreateBlog(CreateView):
     template_name = 'blogs/add_blog.html'
     model = Blog
     fields = ('title', 'description', 'category')
-    success_url = '/blogs/'
+
+    def get_success_url(self):
+        return reverse("blogs:blog_list")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -61,7 +65,9 @@ class BlogList(ListView):
     def get_queryset(self):
         qs = super(BlogList, self).get_queryset()
         if self.sortform.is_valid():
-            qs = qs.order_by(self.sortform.cleaned_data['sort'])
+            val = self.sortform.cleaned_data.get('sort')
+            if val:
+                qs = qs.order_by(self.sortform.cleaned_data['sort'])
             if self.sortform.cleaned_data['search']:
                 qs = qs.filter(title__icontains=self.sortform.cleaned_data['search'])
         return qs
@@ -84,7 +90,14 @@ class CreatePost(CreateView):
     template_name = 'blogs/add_post.html'
     model = Post
     fields = ('title', 'text', 'blog')
-    success_url = '/blogs/'
+
+    def get_success_url(self):
+        return reverse("blogs:blog_list")
+
+    def get_form(self, form_class=None):
+        form = super(CreatePost, self).get_form(form_class=form_class)
+        form.fields['blog'].queryset = self.request.user.blog_set.all()
+        return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -96,12 +109,13 @@ class CreatePostInBlog(CreateView):
     template_name = 'blogs/add_post_in_blog.html'
     model = Post
     fields = ('title', 'text')
-    success_url = '/blogs/'
     blog = None
+
+    def get_success_url(self):
+        return reverse("blogs:blog", args=(self.blog.id, ))
 
     def dispatch(self, request, *args, **kwargs):
         self.blog = get_object_or_404(Blog, id=kwargs['pk'])
-        self.success_url += kwargs['pk']
         return super(CreatePostInBlog, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -120,10 +134,11 @@ class UpdatePost(UpdateView):
     template_name = 'blogs/edit_post.html'
     model = Post
     fields = ('title', 'text')
-    success_url = '/blogs/post/'
+
+    def get_success_url(self):
+        return reverse("blogs:post", args=(self.object.pk, ))
 
     def dispatch(self, request, *args, **kwargs):
-        self.success_url += kwargs['pk']
         return super(UpdatePost, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -135,7 +150,9 @@ class CreateCategory(CreateView):
     template_name = 'blogs/add_category.html'
     model = Category
     fields = ('name',)
-    success_url = '/blogs/'
+
+    def get_success_url(self):
+        return reverse("blogs:blog_list")
 
     def form_valid(self, form):
         return super(CreateCategory, self).form_valid(form)

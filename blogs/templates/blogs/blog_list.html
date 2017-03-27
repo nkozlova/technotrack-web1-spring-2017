@@ -21,7 +21,7 @@
     <h1 style="color: green">Список блогов:</h1>
     {% for blog in object_list %}
         <div>
-            <br><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a></br>
+            <br><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a><br>
             Автор: {{ blog.author }}
             {% if blog.author == user %}
                 <a href="{% url "blogs:edit_blog" pk=blog.id %}">Редактировать блог</a>

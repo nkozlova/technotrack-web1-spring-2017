@@ -7,5 +7,5 @@ from blogs.models import Post
 class Comment(models.Model):
 
     post = models.ForeignKey(Post)
-    text = models.CharField(max_length=255)
+    text = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL)

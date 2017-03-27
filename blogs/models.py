@@ -17,6 +17,9 @@ class Blog(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     category = models.ManyToManyField(Category)
 
+    def __unicode__(self):
+        return self.title
+
 
 class Post(models.Model):
 
@@ -24,6 +27,9 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Like(models.Model):

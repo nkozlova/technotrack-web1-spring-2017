@@ -2,9 +2,9 @@
 
 {% block content %}
     <h2><a href="{% url "blogs:blog_list" %}">Все блоги</a></h2>
-    <h2><p>{{ object.title }}</p></h2><br/>
-    <b>Автор: </b><p>{{ object.author }}</p><br/>
-    <b>Описание: </b><p>{{ object.description }}</p><br/>
+    <h2><p>{{ object.title }}</p></h2><br>
+    <b>Автор: </b><p>{{ object.author }}</p><br>
+    <b>Описание: </b><p>{{ object.description }}</p><br>
     <div class="category">Категории:
         {% for category in blog.category.all %}
             <a href="{% url "blogs:category" pk=category.id %}">{{ category }}</a>
@@ -23,12 +23,12 @@
         <div>
         <h2 style="color: green">Посты данного блога:</h2>
         {% for post in object.post_set.all %}
-            <b>Автор: {{ post.author }}</b><br/>
-            <a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a><br/>
+            <b>Автор: {{ post.author }}</b><br>
+            <a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a><br>
             {% if post.author == user %}
                 <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
             {% endif %}
-            <br><br>
+            <br>
         {% endfor %}
         </div>
     {% endif %}
