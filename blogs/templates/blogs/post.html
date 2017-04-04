@@ -1,32 +1,47 @@
 {% extends "core/base.html" %}
+{% load static %}
 
-{% block content %}
-    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
-    <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a><br>
-    <br>
-    <b>Пост: {{ object.title }}</b><br/>
-    <b>Автор: {{ object.author }}</b>
-    <p>{{ object.text }}</p>
-
-    {% if object.author == user %}
-        <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
-        <br>
-    {% endif %}
-
-    {% if user.is_authenticated %}
-        <br><a href="{% url "comments:create_comment" pk=object.id %}">Создать новый комментарий</a><br>
-    {% endif %}
-
-    {% if object.comment_set.all %}
-        <div>
-        <h2 style="color: green">Комментарии данного поста:</h2>
-       {% for comment in object.comment_set.all %}
-           <p>Автор: {{ comment.author }}</p>
-           <p>{{ comment.text }}</p>
-           <br>
-       {% endfor %}
-        </div>
-    {% else %}
-        <br>Комментариев пока нет>
-    {% endif %}
+{% block extra %}
+    <link rel="stylesheet" href="{% static "blogs/blogs.css" %}">
 {% endblock %}
+
+<div class="content">
+    {% block content %}
+        <nav>
+            <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a><br>
+
+            {% if object.author == user %}
+                <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
+                <br><br>
+            {% endif %}
+        </nav>
+
+
+        <section>
+            <article><strong>{{ object.title }}</strong></article>
+
+
+            <strong>Автор: </strong><i>{{ object.author }}</i>
+            <p>{{ object.text }}</p>
+            <p></p>
+
+            {% if user.is_authenticated %}
+                <p><a href="{% url "comments:create_comment" pk=object.id %}">Создать новый комментарий</a></p>
+                <p></p>
+            {% endif %}
+
+            {% if object.comment_set.all %}
+                <header><strong>Комментарии данного поста:</strong></header><p></p>
+                    {% for comment in object.comment_set.all %}
+                        <div class="blogdiv">
+                            <strong>Автор: </strong><i>{{ comment.author }}</i><p></p>
+                            {{ comment.text }}
+                            <p></p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <header><strong>Комментариев пока нет</strong></header>
+                {% endif %}
+        </section>
+    {% endblock %}
+</div>

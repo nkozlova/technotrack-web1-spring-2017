@@ -11,14 +11,15 @@ class CreateComment(CreateView):
     model = Comment
     fields = ('text',)
     postid = None
-
-    def get_success_url(self):
-        return reverse("blogs:post", args=(self.object.pk, ))
-
+    pk = None
 
     def dispatch(self, request, *args, **kwargs):
         self.postid = get_object_or_404(Post, id=kwargs['pk'])
+        self.pk = kwargs['pk']
         return super(CreateComment, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse("blogs:post", args=(self.pk, ))
 
     def get_context_data(self, **kwargs):
         context = super(CreateComment, self).get_context_data(**kwargs)

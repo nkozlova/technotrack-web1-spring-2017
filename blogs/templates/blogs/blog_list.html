@@ -1,32 +1,43 @@
 {% extends "core/base.html" %}
 {% load widget_tweaks %}
+{% load static %}
 
-{% block content %}
-    <h3><a href="{% url "home" %}">На домашнюю страницу</a></h3>
-
-    <div>
-        <form method="get" action="{% url "blogs:blog_list" %}">
-            {{ sortform.sort.label_tag }}{{ sortform.sort }}
-            {{ sortform.search.label_tag }}<br>{{ sortform.search }}
-            <input type="submit">
-        </form>
-    </div>
-
-    {% if user.is_authenticated %}
-        <h3><a href="{% url "blogs:create_blog" %}">Создать новый блог</a></h3>
-        <a href="{% url "blogs:create_category" %}">Создать новую категорию</a>
-        <a href="{% url "blogs:create_post" %}">Создать новый пост</a>
-    {% endif %}
-
-    <h1 style="color: green">Список блогов:</h1>
-    {% for blog in object_list %}
-        <div>
-            <br><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a><br>
-            Автор: {{ blog.author }}
-            {% if blog.author == user %}
-                <a href="{% url "blogs:edit_blog" pk=blog.id %}">Редактировать блог</a>
-            {% endif %}
-            </b>
-        </div>
-    {% endfor %}
+{% block extra %}
+    <link rel="stylesheet" href="{% static "blogs/blogs.css" %}">
 {% endblock %}
+
+<div class="content">
+    {% block content %}
+        <aside>
+            <form method="get" action="{% url "blogs:blog_list" %}">
+                {{ sortform.sort.label_tag }}{{ sortform.sort }}
+                {{ sortform.search.label_tag }}<br>{{ sortform.search }}
+                <input type="submit" class="button">
+            </form>
+
+            {% if user.is_authenticated %}
+                <p><strong><a href="{% url "blogs:create_blog" %}">Создать новый блог</a></strong></p>
+                <p><a href="{% url "blogs:create_category" %}">Создать новую категорию</a></p>
+                <p><a href="{% url "blogs:create_post" %}">Создать новый пост</a></p>
+            {% endif %}
+        </aside>
+
+        <section>
+            <article><h2>Список блогов:</h2></article>
+            {% for blog in object_list %}
+                <div class="blogdiv">
+                    <a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a>
+                    <br>
+                    Автор: {{ blog.author }}
+                    <details>Описание: {{ blog.description }}</details>
+                    {% if blog.author == user %}
+                        <div class="editlink">
+                            <a href="{% url "blogs:edit_blog" pk=blog.id %}">Редактировать блог</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+
+    {% endblock %}
+</div>

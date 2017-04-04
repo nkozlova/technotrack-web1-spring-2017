@@ -1,14 +1,19 @@
 {% extends "core/base.html" %}
 
-{% block content %}
-    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
-    <h2><a href="{% url "blogs:blog" pk=object.blog.id %}">К блогу</a></h2>
-    <h2><a href="{% url "blogs:post" pk=object.id %}">К посту</a></h2>
+<div class="content">
+    {% block content %}
+        <section>
+            <article>Редактировать пост</article>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Сохранить">
-    </form>
+            <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+            <h2><a href="{% url "blogs:blog" pk=object.blog.id %}">К блогу</a></h2>
+            <h2><a href="{% url "blogs:post" pk=object.id %}">К посту</a></h2>
 
-{% endblock %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="button" value="Сохранить">
+            </form>
+        </section>
+    {% endblock %}
+</div>

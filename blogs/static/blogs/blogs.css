@@ -1,0 +1,44 @@
+div.blogdiv {
+    margin: 10px;
+    padding: 1%;
+    width: 90%;
+    border: 1px dashed darkblue;
+}
+
+div.blogdiv div.editlink {
+    display: none;
+}
+
+div.blogdiv:hover div.editlink {
+    display: block;
+}
+
+article.title {
+    color: darkmagenta;
+    font-size: 30px;
+}
+
+@media screen and (min-width: 500px) {
+    div.blogdiv {
+        width: 80%;
+        position: relative;
+    }
+
+    div.editlink {
+        right: 15px;
+        top: 15px;
+        position: absolute;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    aside {
+        float: right;
+    }
+
+    div.blogdiv {
+        margin: 10px;
+        width: 50%;
+        padding: 10px;
+    }
+}

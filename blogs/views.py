@@ -40,7 +40,7 @@ class CreateBlog(CreateView):
     fields = ('title', 'description', 'category')
 
     def get_success_url(self):
-        return reverse("blogs:blog_list")
+        return reverse("blogs:blog", args=(Blog.objects.all().count(),))
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -91,9 +91,6 @@ class CreatePost(CreateView):
     model = Post
     fields = ('title', 'text', 'blog')
 
-    def get_success_url(self):
-        return reverse("blogs:blog_list")
-
     def get_form(self, form_class=None):
         form = super(CreatePost, self).get_form(form_class=form_class)
         form.fields['blog'].queryset = self.request.user.blog_set.all()
@@ -103,6 +100,9 @@ class CreatePost(CreateView):
         form.instance.author = self.request.user
         return super(CreatePost, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse("blogs:post", args=(Post.objects.all().count(),))
+
 
 class CreatePostInBlog(CreateView):
 
@@ -110,9 +110,6 @@ class CreatePostInBlog(CreateView):
     model = Post
     fields = ('title', 'text')
     blog = None
-
-    def get_success_url(self):
-        return reverse("blogs:blog", args=(self.blog.id, ))
 
     def dispatch(self, request, *args, **kwargs):
         self.blog = get_object_or_404(Blog, id=kwargs['pk'])
@@ -127,6 +124,9 @@ class CreatePostInBlog(CreateView):
         form.instance.author = self.request.user
         form.instance.blog = self.blog
         return super(CreatePostInBlog, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("blogs:post", args=(Post.objects.all().count(), ))
 
 
 class UpdatePost(UpdateView):

@@ -1,21 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
 <html>
     <head>
         <title>My title</title>
+        <link rel="stylesheet" href="{% static "core/base.css" %}">
+        {% block extra %}{% endblock %}
     </head>
+
     <body>
+        {% block title %}
+            <header>
+                {% if user.is_anonymous %}
+                    <strong><a class="header" href="{% url "login" %}">Вход</a>
+                    <a class="header" href="{% url "register" %}">Регистрация</a></strong>
+                {% else %}
+                    <strong class="user">{{ user.username }}
+                    <a class="header" href="{% url "logout" %}">Выход</a></strong>
+                {% endif %}
+            </header>
+        {% endblock %}
 
-        <h1>{% block title %}
+        <nav>
+            <strong><a class="header" href="{% url "home" %}">Домашняя страница</a>
+            <a class="header" href="{% url "blogs:blog_list" %}">Блоги</a></strong>
+        </nav>
 
-            {% if user.is_anonymous %}
-                <a href="{% url "login" %}">Вход</a>
-            {% else %}
-                {{ user.username }}
-                <a href="{% url "logout" %}">Выход</a>
-            {% endif %}
+        <div class="content">{% block content %}{% endblock %}</div>
 
-        {% endblock %}</h1>
-        {% block content %}{% endblock %}
-
-        <p>{% block footer %}Самый лучший в мире сайт 0_0{% endblock %}</p>
+        <footer>{% block footer %}<i>Самый лучший в мире сайт 0_0</i>{% endblock %}</footer>
     </body>
 </html>

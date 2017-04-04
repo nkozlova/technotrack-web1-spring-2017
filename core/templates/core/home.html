@@ -1,14 +1,20 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block extra %}
+    <link rel="stylesheet" href="{% static "core/home.css" %}">
+{% endblock %}
 
 {% block content %}
-    <h2 style="color: green">Количество блогов:</h2>
-    <b>{{ blogs_count }}</b><br/>
-    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+    <header>Главная страница</header>
 
-    <h2 style="color: green">Количество постов:</h2>
-    <b>{{ posts_count }}</b><br/>
-
-    <h2 style="color: green">Количество комментариев:</h2>
-    <b>{{ comments_count }}</b><br/>
+    <section>
+        <p><strong>Количество блогов:</strong><br>{{ blogs_count }}</p>
+        <p><a href="{% url "blogs:blog_list" %}">Список блогов</a></p>
+        <p></p>
+        <p><strong>Количество постов:</strong><br>{{ posts_count }}</p>
+        <p></p>
+        <p><strong>Количество комментариев:</strong><br>{{ comments_count }}</p>
+    </section>
 
 {% endblock %}

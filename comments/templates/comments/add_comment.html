@@ -1,13 +1,21 @@
 {% extends "core/base.html" %}
+{% load static %}
 
-{% block content %}
-    <b>Создание нового комментария</b>
-    <br>
-    <a href="{% url "blogs:blog_list" %}">Вернуться к списку блогов</a><br/>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Создать">
-    </form>
+{% block extra %}
+    <link rel="stylesheet" href="{% static "comments/add_comment.css" %}">
 {% endblock %}
+
+<div class="content">
+    {% block content %}
+        <section>
+            <article>Создание нового комментария</article>
+
+            <a href="{% url "blogs:blog_list" %}">Вернуться к списку блогов</a><br/>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.text }}
+                <input type="submit" class="button" value="Создать">
+            </form>
+        </section>
+    {% endblock %}
+</div>

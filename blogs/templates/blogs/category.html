@@ -1,9 +1,14 @@
 {% extends "core/base.html" %}
 
-{% block content %}
-    <h2><a href="{% url "blogs:blog_list" %}">Все блоги</a></h2>
-    <h2>Блоги в категории "{{ object.name }}":</h2>
-    	{% for blog in object.blog_set.all %}
-        	<p><a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a></p>
-    	{% endfor %}
-{% endblock content %}
+<div class="content">
+    {% block content %}
+        <h2><a href="{% url "blogs:blog_list" %}">Все блоги</a></h2>
+        <section>
+            <article>Блоги в категории "{{ object.name }}":</article>
+            <p></p>
+            {% for blog in object.blog_set.all %}
+                <a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a><br>
+            {% endfor %}
+        </section>
+    {% endblock content %}
+</div>

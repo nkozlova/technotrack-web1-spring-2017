@@ -1,12 +1,18 @@
 {% extends "core/base.html" %}
 
-{% block content %}
-    <b>Создание новой категории</b>
-    <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+<div class="content">
+    {% block content %}
 
-    <form action="{% url "blogs:create_category" %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Создать">
-    </form>
-{% endblock %}
+        <section>
+            <article>Создание новой категории</article>
+
+            <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
+
+            <form action="{% url "blogs:create_category" %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="button" value="Создать">
+            </form>
+        </section>
+    {% endblock %}
+</div>
