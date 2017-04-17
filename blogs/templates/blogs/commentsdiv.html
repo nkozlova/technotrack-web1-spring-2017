@@ -1,0 +1,12 @@
+{% if object.comment_set.all %}
+    <header><strong>Комментарии данного поста:</strong></header><p></p>
+    {% for comment in object.comment_set.all %}
+        <div class="blogdiv">
+            <strong>Автор: </strong><i>{{ comment.author }}</i><p></p>
+            {{ comment.text }}
+            <p></p>
+        </div>
+    {% endfor %}
+{% else %}
+    <header><strong>Комментариев пока нет</strong></header>
+{% endif %}

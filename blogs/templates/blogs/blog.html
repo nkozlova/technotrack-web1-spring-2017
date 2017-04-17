@@ -34,12 +34,11 @@
                 <p><header><strong>Посты данного блога:</strong></header></p>
                 {% for post in object.post_set.all %}
                     <div class="blogdiv">
-                        <p><a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a>
+                        <a href="{% url "blogs:post"  pk=post.id %}">{{ post.title }}</a>
                         <p></p>
-                        {% if post.author == user %}
-                            <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
-                        {% endif %}
-                        </p>
+                        Нравится: <span class="autorefresh" data-post="{{ post.id }}" data-url="{% url "blogs:post_likes" pk=post.id %}">
+                            {{ post.like_set.all.count }}
+                        </span>
                     </div>
                 {% endfor %}
             {% else %}

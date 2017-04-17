@@ -11,7 +11,7 @@
         <aside>
             <form method="get" action="{% url "blogs:blog_list" %}">
                 {{ sortform.sort.label_tag }}{{ sortform.sort }}
-                {{ sortform.search.label_tag }}<br>{{ sortform.search }}
+                {{ sortform.search.label_tag }}<p class="tags">{{ sortform.search }}</p>
                 <input type="submit" class="button">
             </form>
 
@@ -27,7 +27,7 @@
             {% for blog in object_list %}
                 <div class="blogdiv">
                     <a href="{% url "blogs:blog" pk=blog.id %}">{{ blog.title }}</a>
-                    <br>
+                    <p></p>
                     Автор: {{ blog.author }}
                     <details>Описание: {{ blog.description }}</details>
                     {% if blog.author == user %}

@@ -1,9 +1,10 @@
 # coding: utf-8
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, HttpResponse
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .models import Blog, Post, Category
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
+from .models import Blog, Post, Category, Like
 from django import forms
+from django.http import JsonResponse
 
 
 class SortForm(forms.Form):
@@ -85,6 +86,12 @@ class PostView(DetailView):
     template_name = 'blogs/post.html'
 
 
+class PostCommentsView(DetailView):
+
+    queryset = Post.objects.all()
+    template_name = 'blogs/commentsdiv.html'
+
+
 class CreatePost(CreateView):
 
     template_name = 'blogs/add_post.html'
@@ -162,3 +169,27 @@ class CategoryView(DetailView):
 
     queryset = Category.objects.all()
     template_name = 'blogs/category.html'
+
+
+class PostLikeCountView(View):
+
+    post = None
+
+    def dispatch(self, request, pk=None, *args, **kwargs):
+        self.post = get_object_or_404(Post, pk=pk)
+        return super(PostLikeCountView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse(Like.objects.filter(post=self.post).count())
+
+
+def likes_add(request, pk=None):
+    post = get_object_or_404(Post, id=pk)
+    if request.user.is_authenticated():
+        like = Like.objects.filter(post=post, author=request.user).first()
+        if not like:
+            like = Like.objects.create(post=post, author=request.user)
+        else:
+            like.delete()
+
+    return HttpResponse(Like.objects.filter(post=post).count())

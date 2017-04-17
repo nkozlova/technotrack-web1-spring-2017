@@ -34,7 +34,6 @@ class Post(models.Model):
 
 class Like(models.Model):
 
-    post = models.ForeignKey(Post)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    data = models.DateTimeField()
-    count = models.IntegerField()
+    post = models.ForeignKey(Post)
+

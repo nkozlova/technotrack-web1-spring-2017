@@ -1,19 +1,4 @@
-{% extends "core/base.html" %}
-
-<div class="content">
-    {% block content %}
-        <section>
-            <article>Редактировать пост</article>
-
-            <h2><a href="{% url "blogs:blog_list" %}">Список блогов</a></h2>
-            <h2><a href="{% url "blogs:blog" pk=object.blog.id %}">К блогу</a></h2>
-            <h2><a href="{% url "blogs:post" pk=object.id %}">К посту</a></h2>
-
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" class="button" value="Сохранить">
-            </form>
-        </section>
-    {% endblock %}
-</div>
+<form method="post" class="ajax-form" action="{% url "blogs:edit_post" pk=object.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>

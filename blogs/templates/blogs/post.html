@@ -8,40 +8,40 @@
 <div class="content">
     {% block content %}
         <nav>
-            <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a><br>
+            <a href="{% url "blogs:blog" pk=object.blog.id %}">Вернуться к блогу</a>
+            <p></p>
 
             {% if object.author == user %}
-                <a href="{% url "blogs:edit_post" pk=post.id %}">Редактировать пост</a>
-                <br><br>
+                <a class="post-edit-link" href="{% url "blogs:edit_post" pk=object.id %}">Редактировать пост</a>
+                <p></p>
             {% endif %}
         </nav>
 
-
         <section>
-            <article><strong>{{ object.title }}</strong></article>
 
+            <div class="dialog">
+                <div class="dlgbody">
+                </div>
+            </div>
+
+
+            <article><strong>{{ object.title }}</strong></article>
 
             <strong>Автор: </strong><i>{{ object.author }}</i>
             <p>{{ object.text }}</p>
             <p></p>
+
+            <input type="submit" value="Like" class="likebutton button"  data-url="{% url "blogs:post_new_like" pk=object.id %}">
+            Нравится: <span class="autorefresh" data-url="{% url "blogs:post_likes" pk=object.id %}">{{object.like_set.count}}</span>
 
             {% if user.is_authenticated %}
                 <p><a href="{% url "comments:create_comment" pk=object.id %}">Создать новый комментарий</a></p>
                 <p></p>
             {% endif %}
 
-            {% if object.comment_set.all %}
-                <header><strong>Комментарии данного поста:</strong></header><p></p>
-                    {% for comment in object.comment_set.all %}
-                        <div class="blogdiv">
-                            <strong>Автор: </strong><i>{{ comment.author }}</i><p></p>
-                            {{ comment.text }}
-                            <p></p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <header><strong>Комментариев пока нет</strong></header>
-                {% endif %}
+            <div class="autorefresh" data-url="{% url "blogs:post_comments" pk=object.id %}">
+            </div>
+
         </section>
     {% endblock %}
 </div>
