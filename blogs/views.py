@@ -1,10 +1,14 @@
 # coding: utf-8
+import logging
 from django.shortcuts import get_object_or_404, HttpResponse
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from .models import Blog, Post, Category, Like
 from django import forms
 from django.http import JsonResponse
+
+
+logger = logging.getLogger(__name__)
 
 
 class SortForm(forms.Form):
@@ -78,6 +82,10 @@ class BlogView(DetailView):
 
     queryset = Blog.objects.all()
     template_name = 'blogs/blog.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        logger.info('get blog')
+        return super(BlogView, self).dispatch(request, *args, **kwargs)
 
 
 class PostView(DetailView):
